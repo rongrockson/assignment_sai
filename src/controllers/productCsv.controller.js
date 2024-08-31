@@ -33,8 +33,7 @@ const updateOutputUrlsWebhook = catchAsync(async (req, res) => {
     logger.info(`Received webhook for requestId: ${requestId}, serialNumber: ${serialNumber}, outputUrls: ${outputUrls}`);
     await productCsvService.updateOutputUrls(requestId, serialNumber, outputUrls);
     res.status(httpStatus.OK).send();
-  }
-  catch (error) {
+  } catch (error) {
     logger.error(`Failed to process webhook: ${error}`);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send();
   }

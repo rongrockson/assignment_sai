@@ -56,7 +56,10 @@ const generateCsv = async (requestId) => {
 
 // webhook function
 const updateOutputUrls = async (requestId, serialNumber, outputUrls) => {
-  return Promise.allSettled(Product.findOneAndUpdate({ requestId, serialNumber }, { outputUrls }, { new: true }), ProductCsv.findOneAndUpdate({ requestId }, { status: 'completed', completedAt: new Date() }));
+  return Promise.allSettled(
+    Product.findOneAndUpdate({ requestId, serialNumber }, { outputUrls }, { new: true }),
+    ProductCsv.findOneAndUpdate({ requestId }, { status: 'completed', completedAt: new Date() })
+  );
 };
 
 module.exports = {

@@ -63,7 +63,7 @@ const downloadCsv = async (requestId) => {
 const updateOutputUrls = async (requestId, serialNumber, outputUrls) => {
   const product = await productService.updateOutputUrls(requestId, serialNumber, outputUrls);
   return product;
-}
+};
 
 module.exports = {
   uploadCsv,
