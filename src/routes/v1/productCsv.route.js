@@ -9,4 +9,6 @@ router.route('/status').get(imagesController.getStatus);
 
 router.route('/download').get(imagesController.downloadCsv);
 
+router.route('/webhook').post(imagesController.updateOutputUrlsWebhook);
+
 module.exports = router;

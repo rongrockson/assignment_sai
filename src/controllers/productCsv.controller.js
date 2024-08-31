@@ -26,8 +26,15 @@ const downloadCsv = catchAsync(async (req, res) => {
   res.send(csvData);
 });
 
+const updateOutputUrlsWebhook = catchAsync(async (req, res) => {
+  const { requestId, serialNumber, outputUrls } = req.body;
+  await productCsvService.updateOutputUrls(requestId, serialNumber, outputUrls);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   uploadCsv,
   getStatus,
+  updateOutputUrlsWebhook,
   downloadCsv,
 };
