@@ -1,7 +1,7 @@
 const axios = require('axios');
 const httpStatus = require('http-status');
 const { Parser } = require('json2csv');
-const { Product } = require('../models');
+const { Product, ProductCsv } = require('../models');
 const ApiError = require('../utils/ApiError');
 const logger = require('../config/logger');
 const config = require('../config/config');
@@ -56,7 +56,7 @@ const generateCsv = async (requestId) => {
 
 // webhook function
 const updateOutputUrls = async (requestId, serialNumber, outputUrls) => {
-  return Product.findOneAndUpdate({ requestId, serialNumber }, { outputUrls, status: 'completed' }, { new: true });
+  return Promise.allSettled(Product.findOneAndUpdate({ requestId, serialNumber }, { outputUrls }, { new: true }), ProductCsv.findOneAndUpdate({ requestId }, { status: 'completed', completedAt: new Date() }));
 };
 
 module.exports = {

@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const productCsvService = require('../services/productCsv.service');
 const ApiError = require('../utils/ApiError');
+const logger = require('../config/logger');
 
 const uploadCsv = catchAsync(async (req, res) => {
   if (!req.files || !req.files.csv_file) {
@@ -27,9 +28,16 @@ const downloadCsv = catchAsync(async (req, res) => {
 });
 
 const updateOutputUrlsWebhook = catchAsync(async (req, res) => {
-  const { requestId, serialNumber, outputUrls } = req.body;
-  await productCsvService.updateOutputUrls(requestId, serialNumber, outputUrls);
-  res.status(httpStatus.NO_CONTENT).send();
+  try {
+    const { requestId, serialNumber, outputUrls } = req.body;
+    logger.info(`Received webhook for requestId: ${requestId}, serialNumber: ${serialNumber}, outputUrls: ${outputUrls}`);
+    await productCsvService.updateOutputUrls(requestId, serialNumber, outputUrls);
+    res.status(httpStatus.OK).send();
+  }
+  catch (error) {
+    logger.error(`Failed to process webhook: ${error}`);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send();
+  }
 });
 
 module.exports = {
